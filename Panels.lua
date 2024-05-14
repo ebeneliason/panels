@@ -103,6 +103,7 @@ local function setUpPanels(seq)
 			panel.frame = table.shallowcopy(seq.defaultFrame)
 		end
 
+		panel.number = seq.startPanelNumber + i - 1
 		panel.axis = seq.axis
 		panel.scrollingIsReversed = seq.scrollingIsReversed or false
 		panel.direction = seq.direction
@@ -1032,6 +1033,14 @@ local function updateSystemMenu()
 
 end
 
+local function computeStartPanelOffsets(sequences)
+	local n = 1
+	for _, sequence in ipairs(sequences) do
+		sequence.startPanelNumber = n
+		n += #sequence.panels
+	end
+end
+
 local function createCreditsSequence()
 	local credits = Panels.Credits.new()
 	local img = gfx.image.new(400, credits.height + 44)
@@ -1093,6 +1102,7 @@ function Panels.startCutscene(comicData, callback)
 
 	sequences = Panels.comicData
 	currentSeqIndex = 1
+	computeStartPanelOffsets(sequences)
 
 	loadSequence(currentSeqIndex)
 	playdate.inputHandlers.push({
@@ -1119,6 +1129,7 @@ function Panels.start(comicData)
 
 	sequences = Panels.comicData
 	createMenus(sequences, gameDidFinish, currentSeqIndex > 1);
+	computeStartPanelOffsets(sequences)
 
 	if shouldShowMainMenu() then
 		menusAreFullScreen = true
