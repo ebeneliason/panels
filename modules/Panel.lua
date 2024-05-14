@@ -302,6 +302,22 @@ function Panels.Panel.new(data)
 		return result
 	end
 
+	function panel:layerWithTag(t)
+		if not self.layers then return end
+		for _, layer in ipairs(self.layers) do
+			if layer.tag == t then return layer end
+		end
+	end
+
+	function panel:layersWithTag(t)
+		if not self.layers then return end
+		local set = {}
+		for _, layer in ipairs(self.layers) do
+			if layer.tag == t then table.insert(set, layer) end
+		end
+		return set
+	end
+
 	function panel:exit()
 		if self.layers then
 			for i, layer in ipairs(self.layers) do
