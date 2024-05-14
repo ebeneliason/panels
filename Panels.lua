@@ -377,6 +377,15 @@ local function scrollToPreviousPanel()
 	end
 end
 
+function Panels.scrollToPanel(n)
+	local p = panels[n]
+	target = getPanelScrollLocation(p)
+	local duration = sequence.transitionDuration or 500
+	local ease = sequence.transitionEase or pdEaseInOutQuad
+	panelTransitionAnimator = gfx.animator.new(duration, scrollPos, target, ease)
+	panelNum = n
+end
+
 -- -------------------------------------------------
 -- SEQUENCE TRANSITIONS
 
