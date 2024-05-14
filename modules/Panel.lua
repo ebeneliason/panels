@@ -571,13 +571,18 @@ function Panels.Panel.new(data)
 	end
 
 
-	local textMarginLeft<const> = 4
-	local textMarginTop<const> = 1
+	local textMarginHorizontal<const> = 4
+	local textMarginVertical<const> = 1
 	function panel:drawTextLayer(layer, xPos, yPos, cntrlPct)
 		if(layer.cachedTextImg == nil) then
 			layer.cachedTextImg = gfx.image.new(ScreenWidth, ScreenHeight)
 			layer.needsRedraw = true
 		end
+
+		local textMarginLeft = layer.margin and (layer.margin.left or layer.margin.h) or textMarginHorizontal
+		local textMarginRight = layer.margin and (layer.margin.right or layer.margin.h) or textMarginHorizontal
+		local textMarginTop = layer.margin and (layer.margin.top or layer.margin.v) or textMarginVertical
+		local textMarginBottom = layer.margin and (layer.margin.bottom or layer.margin.v) or textMarginVertical
 
 		local lineHeight = layer.lineHeightAdjustment or self.lineHeightAdjustment or 0
 
@@ -640,7 +645,14 @@ function Panels.Panel.new(data)
 					gfx.setImageDrawMode(gfx.kDrawModeFillWhite)
 				end
 				if w > 0 and h > 0 then
-					gfx.fillRect(0, 0, w + 8, h + 2)
+					gfx.fillRect(0, 0, w + textMarginLeft + textMarginRight, h + textMarginTop + textMarginBottom)
+
+					if layer.border then
+						local b = layer.borderWidth or 1
+						gfx.setColor(layer.border)
+						gfx.setLineWidth(b)
+						gfx.drawRect(b * 0.5, b * 0.5, w + textMarginLeft + textMarginRight, h + textMarginTop + textMarginBottom)
+					end
 				end
 			end
 
