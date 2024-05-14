@@ -771,7 +771,11 @@ function Panels.Panel.new(data)
 
 		if not self.borderless then
 			if self.borderImage == nil then
-				self.borderImage = self:drawBorder(borderColor, bgColor)
+				if self.borderRenderFunction then
+					self.borderImage = self:borderRenderFunction(borderColor, bgColor)
+				else
+					self.borderImage = self:drawBorder(borderColor, bgColor)
+				end
 			end
 			self.borderImage:draw(0, 0)
 		end
