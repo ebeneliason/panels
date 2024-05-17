@@ -386,6 +386,14 @@ function Panels.scrollToPanel(n)
 	panelNum = n
 end
 
+function Panels.scrollBy(n)
+	Panels.scrollToPanel(panelNum + n)
+end
+
+function Panels.scroll(pixels)
+	scrollPos += pixels
+end
+
 -- -------------------------------------------------
 -- SEQUENCE TRANSITIONS
 
@@ -854,6 +862,9 @@ local function drawComic(offset)
 	for i, panel in ipairs(panels) do
 		if (panel:isOnScreen(offset)) then
 			panel:render(offset, sequence.foregroundColor, sequence.backgroundColor)
+			if not panelTransitionAnimator then
+				panelNum = panel.number
+			end
 		elseif panel.wasOnScreen then
 			if panel.targetSequenceFunction then
 				targetSequence = panel.targetSequenceFunction()
