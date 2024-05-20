@@ -380,6 +380,7 @@ end
 function Panels.scrollToPanel(n)
 	local p = panels[n]
 	target = getPanelScrollLocation(p)
+	if target == scrollPos then return end
 	local duration = sequence.transitionDuration or 500
 	local ease = sequence.transitionEase or pdEaseInOutQuad
 	panelTransitionAnimator = gfx.animator.new(duration, scrollPos, target, ease)
@@ -392,6 +393,10 @@ end
 
 function Panels.scroll(pixels)
 	scrollPos += pixels
+end
+
+function Panels.justScrolled()
+	return panelTransitionAnimator ~= nil
 end
 
 -- -------------------------------------------------
